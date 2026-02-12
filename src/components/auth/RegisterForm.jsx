@@ -2,8 +2,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { SocialButtons } from "./SocialButton";
+import { postUser } from "@/actions/server/auth";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
+  const router=useRouter()
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,8 +19,11 @@ export const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register attempt:", form);
-    alert("Registration functionality coming soon!");
+     const result=await postUser(form);
+     if(result.acknowledged){
+      alert("successfull.please login")
+      router.push('/login')
+     }
   };
 
   return (
