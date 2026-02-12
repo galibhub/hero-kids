@@ -3,9 +3,12 @@ import { signIn } from "next-auth/react"
 import Link from "next/link";
 import { useState } from "react";
 import { SocialButtons } from "./SocialButton";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 
 const LoginForm = () => {
+  const router=useRouter()
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -20,7 +23,17 @@ const LoginForm = () => {
    const result=await signIn("credentials",{
     email:form.email,
     password:form.password,
-    redirect:false})
+    redirect:false
+  })
+  console.log(result);
+  if(!result.ok){
+    Swal.fire("error","Email password not matched","error")
+  }
+  else{
+     Swal.fire("success","Welcome to kidz Hub","success")
+     router.push('/')
+  }
+    
    
   };
 
