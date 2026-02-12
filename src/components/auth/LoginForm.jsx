@@ -1,15 +1,27 @@
 "use client";
+import { signIn } from "next-auth/react"
 import Link from "next/link";
+import { useState } from "react";
 import { SocialButtons } from "./SocialButton";
 
+
 const LoginForm = () => {
-  const handleSubmit = (e) => {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
-    console.log("Login attempt:", email, password);
-    alert("Login functionality coming soon!");
+   const result=await signIn("credentials",{
+    email:form.email,
+    password:form.password,
+    redirect:false})
+   
   };
 
   return (
@@ -24,6 +36,8 @@ const LoginForm = () => {
               name="email"
               placeholder="Email"
               className="input input-bordered w-full"
+              onChange={handleChange}
+              value={form.email}
               required
             />
 
@@ -32,6 +46,8 @@ const LoginForm = () => {
               name="password"
               placeholder="Password"
               className="input input-bordered w-full"
+              onChange={handleChange}
+              value={form.password}
               required
             />
 

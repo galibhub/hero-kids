@@ -19,14 +19,36 @@ export const postUser = async (payload) => {
     name,
     email,
     password: await bcrypt.hash(password, 14),
-    role:'user'
+    role: "user",
   };
   //insert user
 
-  const result=await dbConnect(collections.USERS).insertOne(newUser)
-  if(result.acknowledged){
-    return{
-        ...result,insertedId:result.insertedId.toString(),
-    }
+  const result = await dbConnect(collections.USERS).insertOne(newUser);
+  if (result.acknowledged) {
+    return {
+      ...result,
+      insertedId: result.insertedId.toString(),
+    };
+  }
+};
+
+
+
+
+
+export const loginUser = async (payload) => {
+  const { email, password } = payload;
+  if (!email || !password) return null;
+
+  const user = await dbConnect(collections.USERS).findOne({ email });
+
+  if (!user) return null;
+
+  const isMatched = await bcrypt.compare(password, user.password);
+
+  if (isMatched) {
+    return user;
+  } else {
+    return null;
   }
 };
