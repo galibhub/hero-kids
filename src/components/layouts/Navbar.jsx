@@ -63,7 +63,7 @@ const Navbar = () => {
         <Link href={"/cart"} className="btn btn-primary">
           <FiShoppingCart />
         </Link>
-        <Link href={"login"}>
+        <Link href={"/login"}>
           <button className="btn btn-primary btn-outline">Login</button>
         </Link>
       </div>
