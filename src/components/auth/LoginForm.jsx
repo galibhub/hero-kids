@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { SocialButtons } from "./SocialButton";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 const LoginForm = () => {
   const router=useRouter()
+  const params=useSearchParams();
+   const callBack=params.get("callbackUrl") || "/";
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -23,7 +25,8 @@ const LoginForm = () => {
    const result=await signIn("credentials",{
     email:form.email,
     password:form.password,
-    redirect:false
+    // redirect:false,
+    callbackUrl:params.get("callbackUrl") || "/",
   })
   console.log(result);
   if(!result.ok){
@@ -31,7 +34,7 @@ const LoginForm = () => {
   }
   else{
      Swal.fire("success","Welcome to kidz Hub","success")
-     router.push('/')
+    //  router.push('/')
   }
     
    
@@ -73,7 +76,7 @@ const LoginForm = () => {
 
           <p className="text-center text-sm mt-4">
             Don't have an account?{" "}
-            <Link href="/register" className="link link-primary">
+            <Link href={`/register?callbackUrl=${callBack}`} className="link link-primary">
               Register
             </Link>
           </p>
